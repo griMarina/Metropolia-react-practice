@@ -1,49 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import { AgGridReact } from 'ag-grid-react';
-import ReactiveButton from 'reactive-button';
-
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import Home from './components/Home';
+import Todo from './components/Todo';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 function App() {
-    const [todo, setTodo] = useState({ description: '', date: '', status: '' });
-    const [todos, setTodos] = useState([]);
-    const [columnDefs] = useState([
-        { field: 'description', sortable: true, rowDrag: true },
-        { field: 'date', sortable: true },
-        { field: 'status', sortable: true }
-    ])
-
-    const inputChanged = (event) => {
-        setTodo({ ...todo, [event.target.name]: event.target.value });
-    }
-
-    const addTodo = () => {
-        setTodos([...todos, todo]);
-        setTodo({ description: '', date: '', status: '' });
-    }
 
     return (
-        <div className="App">
-            <input placeholder="Description" name="description" value={todo.description} onChange={inputChanged} />
-            <input placeholder="Date" name="date" value={todo.date} onChange={inputChanged} />
-            <input placeholder="Status" name="status" value={todo.status} onChange={inputChanged} />
-            <ReactiveButton
-                idleText="Add"
-                onClick={addTodo}
-            />
-            <div className="ag-theme-material" style={{ height: 600, width: 600, margin: 'auto' }}>
-                <AgGridReact
-                    rowData={todos}
-                    columnDefs={columnDefs}
-                    rowDragManaged={false}
-                    animateRows={true}>
-                </AgGridReact>
-            </div>
-
-        </div >
-    );
+        <BrowserRouter>
+            <Link to="/">Home</Link>{' '}
+            <Link to="/todo">Todo</Link>{' '}
+            <Routes>
+                <Route exact path="/" element={<Home />} />
+                <Route path="/todo" element={<Todo />} />
+            </Routes>
+        </BrowserRouter>);
 }
 
 export default App;
