@@ -1,20 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
+import TodoTable from './TodoTable';
 import './App.css';
-import Home from './components/Home';
-import Todo from './components/Todo';
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 function App() {
+    const [todo, setTodo] = useState({ description: '', date: '' });
+    const [todos, setTodos] = useState([]);
+
+    const inputChanged = (event) => {
+        setTodo({ ...todo, [event.target.name]: event.target.value });
+    }
+
+    const addTodo = () => {
+        setTodos([...todos, todo]);
+        setTodo({ description: '', date: '' });
+    }
+
+    const deleteTodo = (row) => {
+        setTodos(todos.filter((todo, index) => index !== row));
+    }
+
+    const clearTable = () => {
+        setTodos([]);
+    }
 
     return (
-        <BrowserRouter>
-            <Link to="/">Home</Link>{' '}
-            <Link to="/todo">Todo</Link>{' '}
-            <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="/todo" element={<Todo />} />
-            </Routes>
-        </BrowserRouter>);
+        <div className="App">
+            <input placeholder="Description" name="description" value={todo.description} onChange={inputChanged} />
+            <input placeholder="Date" name="date" value={todo.date} onChange={inputChanged} />
+            <button onClick={addTodo}>Add</button>
+            <button onClick={clearTable}>Clear</button>
+            <TodoTable todos={todos} deleteTodo={deleteTodo} />
+        </div>
+    );
 }
 
 export default App;
